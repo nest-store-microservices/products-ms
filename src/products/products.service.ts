@@ -21,31 +21,31 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
     })
   }
 
- async findAll(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10 } = paginationDto;
-    const totalRecords = await this.product.count({
-      where: { available: true },
-    });
-    const lastPage = Math.ceil(totalRecords / limit);
-    if (page > lastPage) {
-      throw new Error('Page not found');
-    }
-    if (page < 1) {
-      throw new Error('Page must be greater than 0');
-    }
+ 
 
-    return {
-      totalRecords,
-      page,
-      limit: limit,
-      lastPage,
-      data: await this.product.findMany({
-        skip: (page - 1) * limit,
-        take: page,
-        where: { available: true },
-      }),
+    async findAll( paginationDto: PaginationDto ) {
+
+      const { page = 1, limit = 10 } = paginationDto;
+  
+      const totalPages = await this.product.count({ where: { available: true } });
+      const lastPage = Math.ceil( totalPages / limit );
+  
+      return {
+        meta: {
+          total: totalPages,
+          page: page,
+          lastPage: lastPage,
+        },
+        data: await this.product.findMany({
+          skip: ( page - 1 ) * limit,
+          take: limit,
+          where: {
+            available: true
+          }
+        }),
+        
+      }
     }
-  }
 
  async findOne(id: number) {
     const product = await this.product.findFirst({
