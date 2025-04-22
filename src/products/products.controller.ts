@@ -12,6 +12,7 @@ export class ProductsController {
   // @Post()
   @MessagePattern({ cmd: 'create_product' })
   create(@Payload() createProductDto: CreateProductDto) {
+    
     return this.productsService.create(createProductDto);
   }
 
@@ -26,7 +27,7 @@ export class ProductsController {
 
   // @Get(':id')
   @MessagePattern({ cmd: 'find_one_product' })
-  findOne(@Payload('id') id: string) {
+  findOne(@Payload('id') id: number) {
     return this.productsService.findOne(+id);
   }
 
