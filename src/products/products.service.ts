@@ -111,6 +111,7 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
 
     if (products.length !== ids.length) {
       throw new RpcException({
+        data:[],
         message: 'Some products are not available',
         status: HttpStatus.BAD_REQUEST,
       });
